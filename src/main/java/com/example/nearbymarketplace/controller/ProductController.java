@@ -5,6 +5,7 @@ import com.example.nearbymarketplace.model.Product;
 import com.example.nearbymarketplace.response.ResponseMessage;
 import com.example.nearbymarketplace.service.CategoryService;
 import com.example.nearbymarketplace.service.ProductService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class ProductController {
     }
 
     //get one product by id and increase views
-    @PutMapping("/{id}")
+    @PutMapping("/getProduct/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id){
         Product p = productService.findByIdAndIncreaseViews(id);
         if(p != null){
@@ -68,6 +69,7 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
+    @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseMessage addProduct(@RequestParam(value = "name") String name,
                                       @RequestParam(value = "description", required = false) String description,
@@ -82,6 +84,7 @@ public class ProductController {
         return productService.addProduct(name, description, price, multipartFile, latitude, longitude, categoryId);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     @PutMapping("/update/{productId}")
     public ResponseMessage updateProduct(@RequestParam(value = "name") String name,
                                                  @RequestParam(value = "description", required = false) String description,
@@ -96,19 +99,20 @@ public class ProductController {
         return productService.updateProduct(name, description, price, multipartFile, latitude, longitude, categoryId, isForSale, productId);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     @DeleteMapping("/delete/{productId}")
     public ResponseMessage deleteProduct(@NotNull @PathVariable Long productId){
         return productService.deleteproduct(productId);
     }
 
-    @GetMapping("/image/filename/{filename}")
+    /*@GetMapping("/image/filename/{filename}")
     public ResponseEntity<?> getImageByFilename(@PathVariable("filename") String filename){
         byte[] image = productService.getImageByFilename(filename);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(image);
-    }
+    }*/
 
     @GetMapping("/image/{id}")
     public ResponseEntity<?> getImageByFilename(@PathVariable("id") Long id){

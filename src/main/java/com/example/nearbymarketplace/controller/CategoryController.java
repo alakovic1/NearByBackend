@@ -3,6 +3,7 @@ package com.example.nearbymarketplace.controller;
 import com.example.nearbymarketplace.model.Category;
 import com.example.nearbymarketplace.response.ResponseMessage;
 import com.example.nearbymarketplace.service.CategoryService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     @PostMapping("/add")
     public ResponseMessage addCategory(@Valid @RequestBody Category category){
         return categoryService.addCategory(category);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     @PutMapping("/update/{categoryId}")
     public ResponseMessage updateCategory(@Valid @RequestBody Category category,
                                           @NotNull @PathVariable Long categoryId){
@@ -36,6 +39,7 @@ public class CategoryController {
         return categoryService.updateCategory(category, categoryId);
     }
 
+    @RolesAllowed("ROLE_ADMIN")
     @DeleteMapping("/delete/{categoryId}")
     public ResponseMessage deleteCategory(@NotNull @PathVariable Long categoryId){
         categoryService.findById(categoryId)

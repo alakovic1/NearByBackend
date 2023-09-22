@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        //for images
+        //for images from filesystem - NOT USED
         registry.addResourceHandler("/photos/**")
                 .addResourceLocations("file:photos/");
     }
