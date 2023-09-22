@@ -120,11 +120,11 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
-    public byte[] getImageByFilename(String filename){
+    /*public byte[] getImageByFilename(String filename){
         Optional<Image> dbImage = imageRepository.findByFilename(filename);
         byte[] image = dbImage.get().getData();
         return image;
-    }
+    }*/
 
     public byte[] getImageById(Long id){
         Image dbImage = imageRepository.findById(id)

@@ -24,7 +24,7 @@ public interface ProductService {
 
     Long uploadImage(MultipartFile multipartFile);
 
-    byte[] getImageByFilename(String filename);
+    //byte[] getImageByFilename(String filename);
 
     byte[] getImageById(Long id);
 
