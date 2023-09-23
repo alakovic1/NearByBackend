@@ -69,6 +69,11 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/allFromCheapest")
+    public List<Product> findAllFromCheapest(){
+        return productService.findFromCheapest();
+    }
+
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseMessage addProduct(@RequestParam(value = "name") String name,

@@ -15,19 +15,20 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    //private static final int BATCH_SIZE = 5;
 
     @Autowired
     private ProductRepository productRepository;
@@ -52,6 +53,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public List<Product> getAllProducts(){
+
+        /*List<Product> allProducts = new ArrayList<>();
+
+        Page<Product> allProductInBatch = productRepository.findAll(PageRequest.of(0, BATCH_SIZE));
+        allProducts.addAll(allProductInBatch.getContent());
+
+        while (allProductInBatch.hasNext()) {
+            allProducts.addAll(productRepository.findAll(allProductInBatch.nextPageable()).getContent());
+        }
+
+        return allProducts;*/
+
         return productRepository.findAll();
     }
 
@@ -61,6 +74,10 @@ public class ProductServiceImpl implements ProductService {
 
     public Optional<Product> findById(Long id){
         return productRepository.findById(id);
+    }
+
+    public List<Product> findFromCheapest(){
+        return productRepository.findAllFromCheapest();
     }
 
     public Product findByIdAndIncreaseViews(Long id){
@@ -73,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(p);
     }
 
-    //for image - from filesystem
+    //for image - from filesystem - NOT USED
     /*public String findPhotoAbsolutePath(MultipartFile multipartFile){
         try {
             String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -218,9 +235,10 @@ public class ProductServiceImpl implements ProductService {
             //first delete product from priceHistory - because of FK
             //if there is no price history of that product - still should delete product
             if(priceHistoryRepository.existsByProduct(p)) {
-                PriceHistory priceHistory = priceHistoryRepository.findByProduct(p)
-                        .orElseThrow(() -> new ResourceNotFoundException("ProductHistory not found!"));
-                priceHistoryRepository.deleteById(priceHistory.getId());
+                List<PriceHistory> priceHistory = priceHistoryRepository.findAllByProduct(p);
+                for(PriceHistory ph : priceHistory) {
+                    priceHistoryRepository.deleteById(ph.getId());
+                }
             }
             productRepository.deleteById(id);
 
