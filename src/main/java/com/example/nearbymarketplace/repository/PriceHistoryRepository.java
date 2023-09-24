@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface PriceHistoryRepository extends JpaRepository<PriceHistory, Long> {
+
     boolean existsByProduct(Product product);
 
     List<PriceHistory> findAllByProduct(Product product);
