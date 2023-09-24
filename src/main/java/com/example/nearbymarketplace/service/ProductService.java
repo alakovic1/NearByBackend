@@ -2,6 +2,7 @@ package com.example.nearbymarketplace.service;
 
 import com.example.nearbymarketplace.model.Product;
 import com.example.nearbymarketplace.response.ResponseMessage;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -12,9 +13,9 @@ public interface ProductService {
 
     List<Product> findProductsByCateforyIdOnSale(Long categoryId);
 
-    List<Product> getAllProducts();
+    Page<Product> getAllProducts(int page, int size);
 
-    List<Product> getAllProductsByCategory(Long categoryId);
+    Page<Product> getAllProductsByCategory(Long categoryId, int page, int size);
 
     Optional<Product> findById(Long id);
 

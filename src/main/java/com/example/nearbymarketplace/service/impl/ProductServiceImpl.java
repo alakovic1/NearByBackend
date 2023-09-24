@@ -17,6 +17,7 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByCategory_IdAndIsForSale(categoryId, true);
     }
 
-    public List<Product> getAllProducts(){
+    public Page<Product> getAllProducts(int page, int size){
 
         /*List<Product> allProducts = new ArrayList<>();
 
@@ -64,12 +65,13 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return allProducts;*/
-
-        return productRepository.findAll();
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAll(pageable);
     }
 
-    public List<Product> getAllProductsByCategory(Long categoryId){
-        return productRepository.findByCategory_Id(categoryId);
+    public Page<Product> getAllProductsByCategory(Long categoryId, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByCategory_Id(categoryId, pageable);
     }
 
     public Optional<Product> findById(Long id){

@@ -14,7 +14,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAllByIsForSale(Boolean sale);
     List<Product> findByCategory_IdAndIsForSale(Long categoryId, Boolean sale);
-    List<Product> findByCategory_Id(Long categoryId);
+    Page<Product> findByCategory_Id(Long categoryId, Pageable pageable);
     @Query(value="SELECT * FROM product ORDER BY ST_Distance(coordinates, :p)", nativeQuery = true)
     List<Product> findNearest(Point p);
     @Query(value="SELECT * FROM product ORDER BY price", nativeQuery = true)

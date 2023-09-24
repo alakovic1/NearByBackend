@@ -35,7 +35,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.disable())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/category/all", "/product/all", "/product/byCategoryId/**", "/product/allOnSale", "/product/allOnSaleByCategory/**", "/product/getProduct/**", "/product/allFromCheapest",  "/product/image/**", "/product/nearest/**")
+                .authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/category/all", "/product/all/**", "/product/byCategoryId/**", "/product/allOnSale", "/product/allOnSaleByCategory/**", "/product/getProduct/**", "/product/allFromCheapest",  "/product/image/**", "/product/nearest/**")
                         .permitAll().anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

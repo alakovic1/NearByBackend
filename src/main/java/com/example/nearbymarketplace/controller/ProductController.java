@@ -9,6 +9,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,18 +30,22 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/all")
-    public List<Product> getAllProducts(){
-        return productService.getAllProducts();
+    @GetMapping("/all/{page}/{size}")
+    public Page<Product> getAllProducts(@NotNull @PathVariable int page,
+                                        @NotNull @PathVariable int size){
+
+        return productService.getAllProducts(page, size);
     }
 
-    @GetMapping("/byCategoryId/{categoryId}")
-    public List<Product> getAllProductsByCategory(@NotNull @PathVariable Long categoryId){
+    @GetMapping("/byCategoryId/{categoryId}/{page}/{size}")
+    public Page<Product> getAllProductsByCategory(@NotNull @PathVariable Long categoryId,
+                                                  @NotNull @PathVariable int page,
+                                                  @NotNull @PathVariable int size){
 
         categoryService.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
 
-        return productService.getAllProductsByCategory(categoryId);
+        return productService.getAllProductsByCategory(categoryId, page, size);
     }
 
     //for filtering - products on sale
