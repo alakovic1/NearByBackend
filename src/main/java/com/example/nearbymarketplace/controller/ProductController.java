@@ -49,19 +49,28 @@ public class ProductController {
     }
 
     //for filtering - products on sale
-    @GetMapping("/allOnSale")
-    public List<Product> getAllProductsOnSale(){
-        return productService.findAllProductsOnSale();
+    @GetMapping("/allOnSale/{page}/{size}")
+    public Page<Product> getAllProductsOnSale(@NotNull @PathVariable int page,
+                                              @NotNull @PathVariable int size){
+        return productService.findAllProductsOnSale(page, size);
     }
 
     //for filtering - when category and for sale are checked
-    @GetMapping("/allOnSaleByCategory/{categoryId}")
-    public List<Product> getAllProductsOnSaleByCategory(@NotNull @PathVariable Long categoryId){
+    @GetMapping("/allOnSaleByCategory/{categoryId}/{page}/{size}")
+    public Page<Product> getAllProductsOnSaleByCategory(@NotNull @PathVariable Long categoryId,
+                                                        @NotNull @PathVariable int page,
+                                                        @NotNull @PathVariable int size){
 
         categoryService.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
 
-        return productService.findProductsByCateforyIdOnSale(categoryId);
+        return productService.findProductsByCateforyIdOnSale(categoryId, page, size);
+    }
+
+    @GetMapping("/allFromCheapest/{page}/{size}")
+    public Page<Product> findAllFromCheapest(@NotNull @PathVariable int page,
+                                             @NotNull @PathVariable int size){
+        return productService.findFromCheapest(page, size);
     }
 
     //get one product by id and increase views
@@ -72,11 +81,6 @@ public class ProductController {
             return ResponseEntity.ok(p);
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/allFromCheapest")
-    public List<Product> findAllFromCheapest(){
-        return productService.findFromCheapest();
     }
 
     @RolesAllowed({"ROLE_ADMIN", "ROLE_USER"})

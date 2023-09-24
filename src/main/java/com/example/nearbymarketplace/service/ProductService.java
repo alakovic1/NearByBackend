@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-    List<Product> findAllProductsOnSale();
+    Page<Product> findAllProductsOnSale(int page, int size);
 
-    List<Product> findProductsByCateforyIdOnSale(Long categoryId);
+    Page<Product> findProductsByCateforyIdOnSale(Long categoryId, int page, int size);
 
     Page<Product> getAllProducts(int page, int size);
 
@@ -19,7 +19,7 @@ public interface ProductService {
 
     Optional<Product> findById(Long id);
 
-    List<Product> findFromCheapest();
+    Page<Product> findFromCheapest(int page, int size);
 
     Product findByIdAndIncreaseViews(Long id);
 

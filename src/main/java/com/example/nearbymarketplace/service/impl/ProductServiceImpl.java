@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -45,12 +46,14 @@ public class ProductServiceImpl implements ProductService {
 
     private GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
-    public List<Product> findAllProductsOnSale(){
-        return productRepository.findAllByIsForSale(true);
+    public Page<Product> findAllProductsOnSale(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findAllByIsForSale(true, pageable);
     }
 
-    public List<Product> findProductsByCateforyIdOnSale(Long categoryId){
-        return productRepository.findByCategory_IdAndIsForSale(categoryId, true);
+    public Page<Product> findProductsByCateforyIdOnSale(Long categoryId, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.findByCategory_IdAndIsForSale(categoryId, true, pageable);
     }
 
     public Page<Product> getAllProducts(int page, int size){
@@ -78,8 +81,9 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id);
     }
 
-    public List<Product> findFromCheapest(){
-        return productRepository.findAllFromCheapest();
+    public Page<Product> findFromCheapest(int page, int size){
+        Pageable pageable = PageRequest.of(page, size, Sort.by("price"));
+        return productRepository.findAll(pageable);
     }
 
     public Product findByIdAndIncreaseViews(Long id){

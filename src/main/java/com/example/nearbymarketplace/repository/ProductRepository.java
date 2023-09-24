@@ -12,13 +12,13 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findAllByIsForSale(Boolean sale);
-    List<Product> findByCategory_IdAndIsForSale(Long categoryId, Boolean sale);
+    Page<Product> findAllByIsForSale(Boolean sale, Pageable pageable);
+    Page<Product> findByCategory_IdAndIsForSale(Long categoryId, Boolean sale, Pageable pageable);
     Page<Product> findByCategory_Id(Long categoryId, Pageable pageable);
     @Query(value="SELECT * FROM product ORDER BY ST_Distance(coordinates, :p)", nativeQuery = true)
     List<Product> findNearest(Point p);
-    @Query(value="SELECT * FROM product ORDER BY price", nativeQuery = true)
-    List<Product> findAllFromCheapest();
+    //@Query(value="SELECT * FROM product ORDER BY price", nativeQuery = true)
+    //List<Product> findAllFromCheapest();
 
     //because of big dataset - trying Page
     //Page<Product> findAll(Pageable page);
