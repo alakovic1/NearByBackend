@@ -86,6 +86,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageable);
     }
 
+    public Page<Product> getAllProductsFromCheapestByCategory(Long categoryId, int page, int size){
+        Pageable pageable = PageRequest.of(page, size, Sort.by("price"));
+        return productRepository.findByCategory_Id(categoryId, pageable);
+    }
+
     public Product findByIdAndIncreaseViews(Long id){
         //update db for views
         Product p = findById(id)

@@ -73,6 +73,17 @@ public class ProductController {
         return productService.findFromCheapest(page, size);
     }
 
+    @GetMapping("/FromCheapestbyCategoryId/{categoryId}/{page}/{size}")
+    public Page<Product> getAllProductsFromCheapestByCategory(@NotNull @PathVariable Long categoryId,
+                                                              @NotNull @PathVariable int page,
+                                                              @NotNull @PathVariable int size){
+
+        categoryService.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
+
+        return productService.getAllProductsFromCheapestByCategory(categoryId, page, size);
+    }
+
     //get one product by id and increase views
     @PutMapping("/getProduct/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id){
@@ -88,12 +99,19 @@ public class ProductController {
     public ResponseMessage addProduct(@RequestParam(value = "name") String name,
                                       @RequestParam(value = "description", required = false) String description,
                                       @RequestParam(value = "price") Double price,
-                                      @RequestParam(value = "image", required = false) MultipartFile multipartFile,
+                                      @RequestParam(value = "image") MultipartFile multipartFile,
                                       @RequestParam(value = "latitude", required = false) Double latitude,
                                       @RequestParam(value = "longitude", required = false) Double longitude,
                                       @RequestParam(value = "category_id") Long categoryId){
 
         //todo radi - filesistem String s = productService.findPhotoAbsolutePath(multipartFile);
+
+        if(latitude == null){
+            latitude = 0.0;
+        }
+        if(longitude == null){
+            longitude = 0.0;
+        }
 
         return productService.addProduct(name, description, price, multipartFile, latitude, longitude, categoryId);
     }
@@ -101,11 +119,11 @@ public class ProductController {
     @RolesAllowed("ROLE_ADMIN")
     @PutMapping("/update/{productId}")
     public ResponseMessage updateProduct(@RequestParam(value = "name") String name,
-                                                 @RequestParam(value = "description", required = false) String description,
+                                                 @RequestParam(value = "description") String description,
                                                  @RequestParam(value = "price") Double price,
                                                  @RequestParam(value = "image", required = false) MultipartFile multipartFile,
-                                                 @RequestParam(value = "latitude", required = false) Double latitude,
-                                                 @RequestParam(value = "longitude", required = false) Double longitude,
+                                                 @RequestParam(value = "latitude") Double latitude,
+                                                 @RequestParam(value = "longitude") Double longitude,
                                                  @RequestParam(value = "category_id") Long categoryId,
                                                  @RequestParam(value = "is_for_sale") Boolean isForSale,
                                                  @NotNull @PathVariable Long productId) {
@@ -129,7 +147,7 @@ public class ProductController {
     }*/
 
     @GetMapping("/image/{id}")
-    public ResponseEntity<?> getImageByFilename(@PathVariable("id") Long id){
+    public ResponseEntity<?> getImageById(@PathVariable("id") Long id){
         byte[] image = productService.getImageById(id);
 
         return ResponseEntity.status(HttpStatus.OK)

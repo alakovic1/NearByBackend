@@ -20,6 +20,7 @@ public interface ProductService {
     Optional<Product> findById(Long id);
 
     Page<Product> findFromCheapest(int page, int size);
+    Page<Product> getAllProductsFromCheapestByCategory(Long categoryId, int page, int size);
 
     Product findByIdAndIncreaseViews(Long id);
 
