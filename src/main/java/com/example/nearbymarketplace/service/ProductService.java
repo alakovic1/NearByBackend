@@ -37,7 +37,9 @@ public interface ProductService {
                                Double y,
                                Long categoryId);
 
-    List<Product> getNearestProduct(Double x, Double y);
+    Page<Product> getNearestProduct(Double x, Double y, int page, int size);
+
+    Page<Product> getNearestProductByCategory(Double x, Double y, int page, int size, Long categoryId);
 
     ResponseMessage deleteproduct(Long id);
 

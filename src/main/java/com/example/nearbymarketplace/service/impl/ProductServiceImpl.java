@@ -217,9 +217,16 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    public List<Product> getNearestProduct(Double x, Double y){
+    public Page<Product> getNearestProduct(Double x, Double y, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
         Point point = geometryFactory.createPoint(new Coordinate(x,y));
-        return productRepository.findNearest(point);
+        return productRepository.findNearest(point, pageable);
+    }
+
+    public Page<Product> getNearestProductByCategory(Double x, Double y, int page, int size, Long categoryId){
+        Pageable pageable = PageRequest.of(page, size);
+        Point point = geometryFactory.createPoint(new Coordinate(x,y));
+        return productRepository.findNearestByCategory(point, categoryId, pageable);
     }
 
 }

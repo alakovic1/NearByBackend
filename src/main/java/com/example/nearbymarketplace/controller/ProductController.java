@@ -142,11 +142,16 @@ public class ProductController {
                 .body(image);
     }
 
-    @GetMapping("/nearest/{latitude}/{longitude}")
-    public Product getNearestProduct(@NotNull @PathVariable("latitude") Double latitude,
-                                     @NotNull @PathVariable("longitude") Double longitude){
+    @GetMapping("/nearest/{latitude}/{longitude}/{page}/{size}")
+    public Page<Product> getNearestProduct(@NotNull @PathVariable("latitude") Double latitude,
+                                           @NotNull @PathVariable("longitude") Double longitude, @NotNull @PathVariable int page, @NotNull @PathVariable int size,
+                                     @RequestParam(value = "categoryId", required = false) Long categoryId){
 
-        return productService.getNearestProduct(latitude, longitude).get(0);
+        if(categoryId != null){
+            return productService.getNearestProductByCategory(latitude, longitude, page, size, categoryId);
+        } else {
+            return productService.getNearestProduct(latitude, longitude, page, size);
+        }
     }
 
 }
