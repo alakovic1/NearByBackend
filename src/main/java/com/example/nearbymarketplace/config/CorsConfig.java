@@ -14,8 +14,7 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        // Set allowed origins, methods, and headers
-        config.addAllowedOrigin("*"); // Change to your desired origin
+        config.addAllowedOrigin("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PUT");

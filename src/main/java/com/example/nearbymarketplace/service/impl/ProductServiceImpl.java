@@ -30,8 +30,6 @@ import java.util.*;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    //private static final int BATCH_SIZE = 5;
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -57,17 +55,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Page<Product> getAllProducts(int page, int size){
-
-        /*List<Product> allProducts = new ArrayList<>();
-
-        Page<Product> allProductInBatch = productRepository.findAll(PageRequest.of(0, BATCH_SIZE));
-        allProducts.addAll(allProductInBatch.getContent());
-
-        while (allProductInBatch.hasNext()) {
-            allProducts.addAll(productRepository.findAll(allProductInBatch.nextPageable()).getContent());
-        }
-
-        return allProducts;*/
         Pageable pageable = PageRequest.of(page, size);
         return productRepository.findAll(pageable);
     }
@@ -101,40 +88,6 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.save(p);
     }
 
-    //for image - from filesystem - NOT USED
-    /*public String findPhotoAbsolutePath(MultipartFile multipartFile){
-        try {
-            String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-
-            String uploadDir = "./photos/";
-
-            Path uploadPath = Paths.get(uploadDir);
-
-            if (!Files.exists(uploadPath)) {
-                try {
-                    Files.createDirectories(uploadPath);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-
-            try (InputStream inputStream = multipartFile.getInputStream()) {
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-                //return filePath.toFile().getAbsolutePath();
-                return "http://localhost:8080/photos/" + fileName;
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
-            return "";
-        } catch (Exception e){
-            System.out.println("The photo couldn't be uploaded!");
-        }
-
-        return "";
-    }*/
-
     public Long uploadImage(MultipartFile multipartFile) {
         try {
             Image i = imageRepository.save(Image.builder()
@@ -147,12 +100,6 @@ public class ProductServiceImpl implements ProductService {
         }
         return null;
     }
-
-    /*public byte[] getImageByFilename(String filename){
-        Optional<Image> dbImage = imageRepository.findByFilename(filename);
-        byte[] image = dbImage.get().getData();
-        return image;
-    }*/
 
     public byte[] getImageById(Long id){
         Image dbImage = imageRepository.findById(id)

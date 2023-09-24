@@ -17,9 +17,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByCategory_Id(Long categoryId, Pageable pageable);
     @Query(value="SELECT * FROM product ORDER BY ST_Distance(coordinates, :p)", nativeQuery = true)
     List<Product> findNearest(Point p);
-    //@Query(value="SELECT * FROM product ORDER BY price", nativeQuery = true)
-    //List<Product> findAllFromCheapest();
-
-    //because of big dataset - trying Page
-    //Page<Product> findAll(Pageable page);
 }
