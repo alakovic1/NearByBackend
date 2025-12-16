@@ -29,6 +29,8 @@ DB and models are created through code with the help of the Hibernate ORM tool.
 
 ## Possible improvements
 
+Some technical improvements: The app could be refactored, the APIs could have some more complex implementation, the Java version could be updated.
 
+Additionally, Swagger would be a nice addition, because it's good for documenting all the APIs in the application.
 
 
